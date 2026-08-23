@@ -1,4 +1,4 @@
-import { pgTable, text, varchar, timestamp } from "drizzle-orm/pg-core";
+import { pgTable, text, integer, varchar, timestamp } from "drizzle-orm/pg-core";
 
 export const users = pgTable('users', {
   id: varchar('id', { length: 255 }).primaryKey(), 
@@ -14,7 +14,8 @@ export const profile = pgTable('profile', {
   tagline: text('tagline').notNull(),
   bio: text('bio').notNull(),
   cvLink: text('cv_link'),
-  profileImage: text('profile_image')
+  profileImage: text('profile_image'),
+  views: integer('views').default(0)
 });
 
 

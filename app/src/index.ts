@@ -8,12 +8,14 @@ import { webProjectsRoutes } from './routes/web-project';
 import { journeysRoutes } from './routes/journey';
 import { toolsRoutes } from './routes/tool';
 import { profileRoutes } from './routes/profile';
+import { overviewRoutes } from './routes/overview';
 
 const app = new Elysia()
   .use(cors())
   
   .get('/', () => 'Portfolio API is running!')
   
+  .use(overviewRoutes)
   .use(accountsRoutes)
   .use(contactsRoutes)
   .use(credentialsRoutes)
