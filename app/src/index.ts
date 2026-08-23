@@ -4,6 +4,7 @@ import { accountsRoutes } from './routes/account';
 import { contactsRoutes } from './routes/contact';
 import { credentialsRoutes } from './routes/credential';
 import { gameProjectsRoutes } from './routes/game-project';
+import { webProjectsRoutes } from './routes/web-project';
 
 const app = new Elysia()
   .use(cors())
@@ -14,6 +15,7 @@ const app = new Elysia()
   .use(contactsRoutes)
   .use(credentialsRoutes)
   .use(gameProjectsRoutes)
+  .use(webProjectsRoutes)
   
   .listen(3001);
 
