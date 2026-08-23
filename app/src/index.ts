@@ -3,6 +3,7 @@ import { cors } from '@elysiajs/cors';
 import { accountsRoutes } from './routes/account';
 import { contactsRoutes } from './routes/contact';
 import { credentialsRoutes } from './routes/credential';
+import { gameProjectsRoutes } from './routes/game-project';
 
 const app = new Elysia()
   .use(cors())
@@ -12,6 +13,7 @@ const app = new Elysia()
   .use(accountsRoutes)
   .use(contactsRoutes)
   .use(credentialsRoutes)
+  .use(gameProjectsRoutes)
   
   .listen(3001);
 
