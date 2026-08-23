@@ -5,13 +5,13 @@ import { eq } from 'drizzle-orm';
 
 export const contactsRoutes = new Elysia({ prefix: '/api/contacts' })
 
-  // 1. GET: Ambil semua kontak sosmed
+  // GET All Contacts
   .get('/', async () => {
     const allContacts = await database.select().from(contacts);
     return { success: true, data: allContacts };
   })
 
-  // 2. GET by ID
+  // GET by ID
   .get('/:id', async ({ params: { id }, set }) => {
     const contact = await database.select().from(contacts).where(eq(contacts.id, id));
     
@@ -23,7 +23,7 @@ export const contactsRoutes = new Elysia({ prefix: '/api/contacts' })
     return { success: true, data: contact[0] };
   })
 
-  // 3. POST New Contact
+  // POST New Contact
   .post('/', async ({ body }) => {
     const newId = crypto.randomUUID(); 
     
@@ -45,7 +45,7 @@ export const contactsRoutes = new Elysia({ prefix: '/api/contacts' })
     })
   })
 
-  // 4. PUT Update Contact  
+  // PUT Update Contact  
   .put('/:id', async ({ params: { id }, body, set }) => {
     const updatedContact = await database.update(contacts)
       .set({
@@ -72,7 +72,7 @@ export const contactsRoutes = new Elysia({ prefix: '/api/contacts' })
     })
   })
 
-  // 5. DELETE Contact
+  // DELETE Contact
   .delete('/:id', async ({ params: { id }, set }) => {
     const deletedContact = await database.delete(contacts).where(eq(contacts.id, id)).returning({ id: contacts.id });
     
