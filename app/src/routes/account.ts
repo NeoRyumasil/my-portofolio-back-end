@@ -60,7 +60,6 @@ export const accountsRoutes = new Elysia({ prefix: '/api/accounts' })
 
     return { success: true, message: 'Akun berhasil dibuat', data: newUser[0] };
   }, {
-    // Input Validation
     body: t.Object({
       username: t.String(),
       password: t.String()

@@ -1,13 +1,15 @@
 import { Elysia } from 'elysia';
 import { cors } from '@elysiajs/cors';
 import { accountsRoutes } from './routes/account';
+import { contactsRoutes } from './routes/contact';
 
 const app = new Elysia()
   .use(cors())
   
-  .get('/', () => 'Portfolio API is running! 🚀')
+  .get('/', () => 'Portfolio API is running!')
   
   .use(accountsRoutes)
+  .use(contactsRoutes)
   
   .listen(3001);
 
