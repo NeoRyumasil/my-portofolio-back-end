@@ -7,6 +7,7 @@ import { gameProjectsRoutes } from './routes/game-project';
 import { webProjectsRoutes } from './routes/web-project';
 import { journeysRoutes } from './routes/journey';
 import { toolsRoutes } from './routes/tool';
+import { profileRoutes } from './routes/profile';
 
 const app = new Elysia()
   .use(cors())
@@ -20,6 +21,7 @@ const app = new Elysia()
   .use(webProjectsRoutes)
   .use(journeysRoutes)  
   .use(toolsRoutes)
+  .use(profileRoutes)
 
   .listen(3001);
 
