@@ -11,7 +11,7 @@ export const credentialsRoutes = new Elysia({ prefix: '/api/credentials' })
     return { success: true, data: allCredentials };
   })
 
-  // 2. GET by ID
+  // GET by ID
   .get('/:id', async ({ params: { id }, set }) => {
     const credential = await database.select().from(credentials).where(eq(credentials.id, id));
     
@@ -72,7 +72,7 @@ export const credentialsRoutes = new Elysia({ prefix: '/api/credentials' })
     })
   })
 
-  // 5. DELETE Credential
+  // DELETE Credential
   .delete('/:id', async ({ params: { id }, set }) => {
     const deletedCredential = await database.delete(credentials).where(eq(credentials.id, id)).returning({ id: credentials.id });
     

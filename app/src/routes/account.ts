@@ -66,7 +66,7 @@ export const accountsRoutes = new Elysia({ prefix: '/api/accounts' })
     })
   })
 
-  // 3. PUT Update Account  
+  // PUT Update Account  
   .put('/:id', async ({ params: { id }, body, set }) => {
     const { username, password } = body;
     
@@ -94,7 +94,7 @@ export const accountsRoutes = new Elysia({ prefix: '/api/accounts' })
     })
   })
 
-  // 4. DELETE Hapus akun
+  // DELETE Hapus akun
   .delete('/:id', async ({ params: { id }, set }) => {
     const deletedUser = await database.delete(users).where(eq(users.id, id)).returning({ id: users.id });
     

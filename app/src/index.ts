@@ -1,5 +1,6 @@
 import { Elysia } from 'elysia';
 import { cors } from '@elysiajs/cors';
+import { swagger } from '@elysiajs/swagger';
 import { accountsRoutes } from './routes/account';
 import { contactsRoutes } from './routes/contact';
 import { credentialsRoutes } from './routes/credential';
@@ -12,6 +13,17 @@ import { overviewRoutes } from './routes/overview';
 
 const app = new Elysia()
   .use(cors())
+
+  .use(swagger({
+    path: '/swagger', 
+    documentation: {
+      info: {
+        title: 'Admin Portfolio API',
+        version: '1.0.0',
+        description: 'API Documentation untuk dashboard admin portofolio'
+      }
+    }
+  }))
   
   .get('/', () => 'Portfolio API is running!')
   
@@ -29,4 +41,8 @@ const app = new Elysia()
 
 console.log(
   `🦊 Elysia API is running at http://${app.server?.hostname}:${app.server?.port}`
+);
+
+console.log(
+  `📖 Swagger UI is available at http://${app.server?.hostname}:${app.server?.port}/swagger`
 );
