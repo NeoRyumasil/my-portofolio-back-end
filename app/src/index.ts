@@ -1,6 +1,7 @@
 import { Elysia } from 'elysia';
 import { cors } from '@elysiajs/cors';
 import { swagger } from '@elysiajs/swagger';
+import { rateLimit } from 'elysia-rate-limit';
 
 import { authRoutes } from './routes/auth';
 import { accountsRoutes } from './routes/account';
@@ -15,6 +16,20 @@ import { overviewRoutes } from './routes/overview';
 
 const app = new Elysia()
   .use(cors())
+
+  .use(rateLimit({
+    duration: 60000, 
+    max: 100, 
+    errorResponse: new Response(
+      JSON.stringify({ success: false, message: 'Too many requests' }), 
+      {
+        status: 429, 
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    )
+  }))
 
   .use(swagger({
     path: '/swagger', 
