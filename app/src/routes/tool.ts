@@ -2,6 +2,7 @@ import { Elysia, t } from 'elysia';
 import { database } from '../database';
 import { tools } from '../database/schema';
 import { eq } from 'drizzle-orm';
+import { requireAuth } from '../middleware/auth';
 
 export const toolsRoutes = new Elysia({ prefix: '/api/tools' })
 
@@ -22,6 +23,9 @@ export const toolsRoutes = new Elysia({ prefix: '/api/tools' })
     
     return { success: true, data: tool[0] };
   })
+
+  // Auth Check
+  .use(requireAuth)
 
   // POST New Tool
   .post('/', async ({ body }) => {

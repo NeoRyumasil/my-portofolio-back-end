@@ -2,6 +2,7 @@ import { Elysia, t } from 'elysia';
 import { database } from '../database';
 import { contacts } from '../database/schema';
 import { eq } from 'drizzle-orm';
+import { requireAuth } from '../middleware/auth';
 
 export const contactsRoutes = new Elysia({ prefix: '/api/contacts' })
 
@@ -22,6 +23,9 @@ export const contactsRoutes = new Elysia({ prefix: '/api/contacts' })
     
     return { success: true, data: contact[0] };
   })
+
+  // Auth Check
+  .use(requireAuth)
 
   // POST New Contact
   .post('/', async ({ body }) => {

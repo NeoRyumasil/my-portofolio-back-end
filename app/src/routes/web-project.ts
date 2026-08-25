@@ -2,6 +2,7 @@ import { Elysia, t } from 'elysia';
 import { database } from '../database';
 import { webProjects } from '../database/schema';
 import { eq } from 'drizzle-orm';
+import { requireAuth } from '../middleware/auth';
 
 export const webProjectsRoutes = new Elysia({ prefix: '/api/web-projects' })
 
@@ -22,6 +23,9 @@ export const webProjectsRoutes = new Elysia({ prefix: '/api/web-projects' })
     
     return { success: true, data: project[0] };
   })
+
+  // Auth Check
+  .use(requireAuth)
 
   // POST New Web Project    
   .post('/', async ({ body }) => {

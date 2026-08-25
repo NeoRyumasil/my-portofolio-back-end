@@ -1,6 +1,8 @@
 import { Elysia } from 'elysia';
 import { cors } from '@elysiajs/cors';
 import { swagger } from '@elysiajs/swagger';
+
+import { authRoutes } from './routes/auth';
 import { accountsRoutes } from './routes/account';
 import { contactsRoutes } from './routes/contact';
 import { credentialsRoutes } from './routes/credential';
@@ -27,6 +29,7 @@ const app = new Elysia()
   
   .get('/', () => 'Portfolio API is running!')
   
+  .use(authRoutes)
   .use(overviewRoutes)
   .use(accountsRoutes)
   .use(contactsRoutes)

@@ -18,7 +18,6 @@ export const profile = pgTable('profile', {
   views: integer('views').default(0)
 });
 
-
 export const tools = pgTable('tools', {
   id: varchar('id', { length: 255 }).primaryKey(),
   name: varchar('name', { length: 255 }).notNull(),
@@ -36,7 +35,6 @@ export const webProjects = pgTable('web_projects', {
   image: text('image').notNull(),
   url: text('url')
 });
-
 
 export const gameProjects = pgTable('game_projects', {
   id: varchar('id', { length: 255 }).primaryKey(),

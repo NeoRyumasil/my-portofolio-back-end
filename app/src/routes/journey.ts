@@ -2,6 +2,7 @@ import { Elysia, t } from 'elysia';
 import { database } from '../database';
 import { journeys } from '../database/schema';
 import { eq, desc } from 'drizzle-orm';
+import { requireAuth } from '../middleware/auth';
 
 export const journeysRoutes = new Elysia({ prefix: '/api/journeys' })
 
@@ -22,6 +23,9 @@ export const journeysRoutes = new Elysia({ prefix: '/api/journeys' })
     
     return { success: true, data: journey[0] };
   })
+
+  // Auth Check
+  .use(requireAuth)
 
   // POST New Milestone
   .post('/', async ({ body }) => {

@@ -2,6 +2,7 @@ import { Elysia, t } from 'elysia';
 import { database } from '../database';
 import { credentials } from '../database/schema';
 import { eq } from 'drizzle-orm';
+import { requireAuth } from '../middleware/auth';
 
 export const credentialsRoutes = new Elysia({ prefix: '/api/credentials' })
 
@@ -22,6 +23,9 @@ export const credentialsRoutes = new Elysia({ prefix: '/api/credentials' })
     
     return { success: true, data: credential[0] };
   })
+
+  // Auth Check
+  .use(requireAuth)
 
   // POST New Credential
   .post('/', async ({ body }) => {

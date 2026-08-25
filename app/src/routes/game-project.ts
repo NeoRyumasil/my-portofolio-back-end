@@ -2,6 +2,7 @@ import { Elysia, t } from 'elysia';
 import { database } from '../database';
 import { gameProjects } from '../database/schema';
 import { eq } from 'drizzle-orm';
+import { requireAuth } from '../middleware/auth';
 
 export const gameProjectsRoutes = new Elysia({ prefix: '/api/game-projects' })
 
@@ -22,6 +23,9 @@ export const gameProjectsRoutes = new Elysia({ prefix: '/api/game-projects' })
     
     return { success: true, data: game[0] };
   })
+
+  // Auth Check
+  .use(requireAuth)
 
   // POST New Game Project
   .post('/', async ({ body }) => {

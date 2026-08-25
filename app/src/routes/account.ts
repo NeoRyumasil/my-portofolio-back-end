@@ -2,8 +2,12 @@ import { Elysia, t } from 'elysia';
 import { database } from '../database';
 import { users } from '../database/schema';
 import { eq } from 'drizzle-orm';
+import { requireAuth } from '../middleware/auth';
 
 export const accountsRoutes = new Elysia({ prefix: '/api/accounts' })
+
+  // Auth Check
+  .use(requireAuth) 
 
   // GET All Data
   .get('/', async () => {

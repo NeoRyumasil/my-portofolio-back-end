@@ -2,6 +2,7 @@ import { Elysia, t } from 'elysia';
 import { database } from '../database';
 import { profile } from '../database/schema';
 import { eq } from 'drizzle-orm';
+import { requireAuth } from '../middleware/auth';
 
 export const profileRoutes = new Elysia({ prefix: '/api/profile' })
 
@@ -22,6 +23,9 @@ export const profileRoutes = new Elysia({ prefix: '/api/profile' })
     
     return { success: true, data: singleProfile[0] };
   })
+
+  // Auth Check
+  .use(requireAuth)
 
   // POST New Profile
   .post('/', async ({ body }) => {

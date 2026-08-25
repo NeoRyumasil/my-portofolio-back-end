@@ -2,8 +2,12 @@ import { Elysia } from 'elysia';
 import { database } from '../database';
 import { webProjects, gameProjects, credentials, profile } from '../database/schema';
 import { sql, eq } from 'drizzle-orm';
+import { requireAuth } from '../middleware/auth';
 
 export const overviewRoutes = new Elysia({ prefix: '/api/overview' })
+
+  // Auth Check
+  .use(requireAuth)
 
   // Get Overview Data
   .get('/', async () => {
