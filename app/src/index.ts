@@ -3,6 +3,8 @@ import { cors } from '@elysiajs/cors';
 import { swagger } from '@elysiajs/swagger';
 import { rateLimit } from 'elysia-rate-limit';
 
+import { ErrorHandler } from './middleware/error-handler';  
+
 import { authRoutes } from './routes/auth';
 import { accountsRoutes } from './routes/account';
 import { contactsRoutes } from './routes/contact';
@@ -15,7 +17,13 @@ import { profileRoutes } from './routes/profile';
 import { overviewRoutes } from './routes/overview';
 
 const app = new Elysia()
-  .use(cors())
+  .use(ErrorHandler)
+
+  .use(cors({
+    origin: ['http://localhost:3000', 'https://portofolioku.com'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: true
+  }))
 
   .use(rateLimit({
     duration: 60000, 
