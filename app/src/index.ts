@@ -1,7 +1,6 @@
 import { Elysia } from 'elysia';
 import { cors } from '@elysiajs/cors';
 import { swagger } from '@elysiajs/swagger';
-import { rateLimit } from 'elysia-rate-limit';
 
 import { ErrorHandler } from './middleware/error-handler';  
 
@@ -24,20 +23,6 @@ const app = new Elysia()
     origin: ['http://localhost:3000', 'https://portofolioku.com'],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true
-  }))
-
-  .use(rateLimit({
-    duration: 60000, 
-    max: 100, 
-    errorResponse: new Response(
-      JSON.stringify({ success: false, message: 'Too many requests' }), 
-      {
-        status: 429, 
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }
-    )
   }))
 
   .use(swagger({
