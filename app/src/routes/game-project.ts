@@ -1,15 +1,47 @@
 import { Elysia, t } from 'elysia';
 import { database } from '../database';
 import { gameProjects } from '../database/schema';
-import { eq } from 'drizzle-orm';
+import { eq, sql } from 'drizzle-orm';
 import { requireAuth } from '../middleware/auth';
 
 export const gameProjectsRoutes = new Elysia({ prefix: '/api/game-projects' })
 
   // GET All Data
-  .get('/', async () => {
-    const allGames = await database.select().from(gameProjects);
-    return { success: true, data: allGames };
+  .get('/', async ({ query }) => {
+    const page = Number(query.page) || 1;
+    const limit = Number(query.limit) || 9; 
+    const offset = (page - 1) * limit;
+
+    const totalCountRes = await database
+      .select({ count: sql<number>`count(*)` })
+      .from(gameProjects);
+    
+    const totalItems = Number(totalCountRes[0].count);
+    const totalPages = Math.ceil(totalItems / limit);
+
+    const data = await database
+      .select()
+      .from(gameProjects)
+      .limit(limit)
+      .offset(offset);
+
+    return { 
+      success: true, 
+      data,
+      meta: {
+        currentPage: page,
+        itemsPerPage: limit,
+        totalItems,
+        totalPages,
+        hasNextPage: page < totalPages,
+        hasPrevPage: page > 1
+      }
+    };
+  }, {
+    query: t.Optional(t.Object({
+      page: t.Optional(t.String()),
+      limit: t.Optional(t.String())
+    }))
   })
 
   // GET by ID:
