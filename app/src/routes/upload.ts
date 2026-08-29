@@ -78,4 +78,29 @@ export const uploadRoutes = new Elysia({ prefix: '/api/upload' })
     body: t.Object({
       image: t.File() 
     })
+  })
+
+  .delete('/', async ({ body, set }) => {
+    try {
+      const url = body.url;
+
+      const match = url.match(/id=([^&]+)/);
+      if (!match) {
+        set.status = 400;
+        return { success: false, message: 'Format URL Google Drive tidak valid' };
+      }
+      
+      const fileId = match[1];
+      await drive.files.delete({ fileId });
+      return { success: true, message: 'Gambar berhasil dihapus dari Google Drive' };
+
+    } catch (error) {
+      console.error('Delete Error:', error);
+      set.status = 500;
+      return { success: false, message: 'Gagal menghapus gambar di GDrive' };
+    }
+  }, {
+    body: t.Object({
+      url: t.String()
+    })
   });
