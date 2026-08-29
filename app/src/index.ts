@@ -15,6 +15,7 @@ import { journeysRoutes } from './routes/journey';
 import { toolsRoutes } from './routes/tool';
 import { profileRoutes } from './routes/profile';
 import { overviewRoutes } from './routes/overview';
+import { uploadRoutes } from './routes/upload';
 
 const app = new Elysia()
   .use(ErrorHandler)
@@ -62,6 +63,7 @@ const app = new Elysia()
   .use(journeysRoutes)  
   .use(toolsRoutes)
   .use(profileRoutes)
+  .use(uploadRoutes)
 
   .listen(3001);
 
