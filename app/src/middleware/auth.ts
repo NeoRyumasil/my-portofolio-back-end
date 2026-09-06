@@ -8,21 +8,17 @@ export const requireAuth = new Elysia()
       secret: process.env.JWT_SECRET || 'rahasia-negara-super-aman',
     })
   )
-  
-  .onBeforeHandle(async ({ jwt, headers, set }) => {
-    const authHeader = headers.authorization;
+  .onBeforeHandle(async ({ jwt, cookie: { auth_token }, set }) => {
     
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    if (!auth_token.value) {
       set.status = 401;
-      return { success: false, message: 'Unauthorized: Harap sertakan token Bearer' };
+      return { success: false, message: 'Unauthorized: Token tidak ditemukan di cookie' };
     }
-
-    const token = authHeader.split(' ')[1];
     
-    const payload = await jwt.verify(token);
+    const payload = await jwt.verify(auth_token.value as string);
 
     if (!payload) {
       set.status = 401;
-      return { success: false, message: 'Unauthorized' };
+      return { success: false, message: 'Unauthorized: Token tidak valid atau kadaluarsa' };
     }
   });

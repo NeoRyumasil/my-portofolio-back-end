@@ -6,23 +6,25 @@ import { requireAuth } from '../middleware/auth';
 
 export const credentialsRoutes = new Elysia({ prefix: '/api/credentials' })
 
+  // Get All Credential
   .get('/', async ({ query }) => {
     const page = Number(query.page) || 1;
     const limit = Number(query.limit) || 9; 
     const offset = (page - 1) * limit;
 
-    const totalCountRes = await database
-      .select({ count: sql<number>`count(*)` })
-      .from(credentials);
-      
+    let dbQuery = database.select().from(credentials);
+    let countQuery = database.select({ count: sql<number>`count(*)` }).from(credentials);
+
+    if (query.isTop === 'true') {
+      dbQuery = dbQuery.where(eq(credentials.isTop, true)) as any;
+      countQuery = countQuery.where(eq(credentials.isTop, true)) as any;
+    }
+
+    const totalCountRes = await countQuery;
     const totalItems = Number(totalCountRes[0].count);
     const totalPages = Math.ceil(totalItems / limit);
 
-    const data = await database
-      .select()
-      .from(credentials)
-      .limit(limit)
-      .offset(offset);
+    const data = await dbQuery.limit(limit).offset(offset);
 
     return { 
       success: true, 
@@ -39,7 +41,8 @@ export const credentialsRoutes = new Elysia({ prefix: '/api/credentials' })
   }, {
     query: t.Optional(t.Object({
       page: t.Optional(t.String()),
-      limit: t.Optional(t.String())
+      limit: t.Optional(t.String()),
+      isTop: t.Optional(t.String())
     }))
   })
 
@@ -67,7 +70,8 @@ export const credentialsRoutes = new Elysia({ prefix: '/api/credentials' })
       title: body.title,
       issuer: body.issuer,
       image: body.image,
-      url: body.url || '' 
+      url: body.url || '',
+      isTop: body.isTop || false 
     }).returning();
 
     return { success: true, message: 'Credential created successfully', data: newCredential[0] };
@@ -76,7 +80,8 @@ export const credentialsRoutes = new Elysia({ prefix: '/api/credentials' })
       title: t.String(),
       issuer: t.String(),
       image: t.String(),
-      url: t.Optional(t.String()) 
+      url: t.Optional(t.String()),
+      isTop: t.Optional(t.Boolean()) 
     })
   })
 
@@ -87,7 +92,8 @@ export const credentialsRoutes = new Elysia({ prefix: '/api/credentials' })
         title: body.title,
         issuer: body.issuer,
         image: body.image,
-        url: body.url || ''
+        url: body.url || '',
+        isTop: body.isTop !== undefined ? body.isTop : false 
       })
       .where(eq(credentials.id, id))
       .returning();
@@ -103,7 +109,8 @@ export const credentialsRoutes = new Elysia({ prefix: '/api/credentials' })
       title: t.String(),
       issuer: t.String(),
       image: t.String(),
-      url: t.Optional(t.String())
+      url: t.Optional(t.String()),
+      isTop: t.Optional(t.Boolean()) 
     })
   })
 

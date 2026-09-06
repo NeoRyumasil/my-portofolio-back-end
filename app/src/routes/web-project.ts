@@ -12,18 +12,19 @@ export const webProjectsRoutes = new Elysia({ prefix: '/api/web-projects' })
     const limit = Number(query.limit) || 9; 
     const offset = (page - 1) * limit;
 
-    const totalCountRes = await database
-      .select({ count: sql<number>`count(*)` })
-      .from(webProjects);
-      
+    let dbQuery = database.select().from(webProjects);
+    let countQuery = database.select({ count: sql<number>`count(*)` }).from(webProjects);
+
+    if (query.isTop === 'true') {
+      dbQuery = dbQuery.where(eq(webProjects.isTop, true)) as any;
+      countQuery = countQuery.where(eq(webProjects.isTop, true)) as any;
+    }
+
+    const totalCountRes = await countQuery;
     const totalItems = Number(totalCountRes[0].count);
     const totalPages = Math.ceil(totalItems / limit);
 
-    const data = await database
-      .select()
-      .from(webProjects)
-      .limit(limit)
-      .offset(offset);
+    const data = await dbQuery.limit(limit).offset(offset);
 
     return { 
       success: true, 
@@ -40,7 +41,8 @@ export const webProjectsRoutes = new Elysia({ prefix: '/api/web-projects' })
   }, {
     query: t.Optional(t.Object({
       page: t.Optional(t.String()),
-      limit: t.Optional(t.String())
+      limit: t.Optional(t.String()),
+      isTop: t.Optional(t.String()) 
     }))
   })
 
@@ -71,7 +73,8 @@ export const webProjectsRoutes = new Elysia({ prefix: '/api/web-projects' })
       role: body.role,
       url: body.url || '', 
       image: body.image,
-      description: body.description
+      description: body.description,
+      isTop: body.isTop || false
     }).returning();
 
     return { success: true, message: 'Web project created successfully', data: newProject[0] };
@@ -83,7 +86,8 @@ export const webProjectsRoutes = new Elysia({ prefix: '/api/web-projects' })
       role: t.String(),
       url: t.Optional(t.String()), 
       image: t.String(),
-      description: t.String()
+      description: t.String(),
+      isTop: t.Optional(t.Boolean())
     })
   })
 
@@ -97,7 +101,8 @@ export const webProjectsRoutes = new Elysia({ prefix: '/api/web-projects' })
         role: body.role,
         url: body.url || '',
         image: body.image,
-        description: body.description
+        description: body.description,
+        isTop: body.isTop !== undefined ? body.isTop : false
       })
       .where(eq(webProjects.id, id))
       .returning();
@@ -116,7 +121,8 @@ export const webProjectsRoutes = new Elysia({ prefix: '/api/web-projects' })
       role: t.String(),
       url: t.Optional(t.String()),
       image: t.String(),
-      description: t.String()
+      description: t.String(),
+      isTop: t.Optional(t.Boolean())
     })
   })
 

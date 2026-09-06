@@ -1,4 +1,4 @@
-import { pgTable, text, integer, varchar, timestamp } from "drizzle-orm/pg-core";
+import { pgTable, text, integer, varchar, timestamp, boolean } from "drizzle-orm/pg-core";
 
 export const users = pgTable('users', {
   id: varchar('id', { length: 255 }).primaryKey(), 
@@ -33,7 +33,8 @@ export const webProjects = pgTable('web_projects', {
   role: varchar('role', { length: 255 }).notNull(),
   description: text('description').notNull(),
   image: text('image').notNull(),
-  url: text('url')
+  url: text('url'),
+  isTop: boolean('is_top').default(false)
 });
 
 export const gameProjects = pgTable('game_projects', {
@@ -44,7 +45,8 @@ export const gameProjects = pgTable('game_projects', {
   role: varchar('role', { length: 255 }).notNull(),
   description: text('description').notNull(),
   image: text('image').notNull(),
-  url: text('url')
+  url: text('url'),
+  isTop: boolean('is_top').default(false)
 });
 
 export const credentials = pgTable('credentials', {
@@ -52,7 +54,8 @@ export const credentials = pgTable('credentials', {
   title: varchar('title', { length: 255 }).notNull(),
   issuer: varchar('issuer', { length: 255 }).notNull(),
   image: text('image').notNull(),
-  url: text('url')
+  url: text('url'),
+  isTop: boolean('is_top').default(false)
 });
 
 export const contacts = pgTable('contacts', {

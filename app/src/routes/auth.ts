@@ -13,7 +13,7 @@ export const authRoutes = new Elysia({ prefix: '/api/auth' })
   )
   
   // Login Endpoint
-  .post('/login', async ({ body, jwt, set }) => {
+  .post('/login', async ({ body, jwt, set, cookie: { auth_token } }) => {
     const userResult = await database.select().from(users).where(eq(users.username, body.username));
     
     if (userResult.length === 0) {
@@ -34,10 +34,16 @@ export const authRoutes = new Elysia({ prefix: '/api/auth' })
       username: foundUser.username 
     });
 
+    auth_token.value = token;
+    auth_token.httpOnly = true;
+    auth_token.secure = process.env.NODE_ENV === 'production';
+    auth_token.sameSite = 'strict';
+    auth_token.path = '/';
+    auth_token.maxAge = 7 * 86400;
+
     return { 
       success: true, 
-      message: 'Login berhasil', 
-      token 
+      message: 'Login berhasil',
     };
   }, {
     body: t.Object({
