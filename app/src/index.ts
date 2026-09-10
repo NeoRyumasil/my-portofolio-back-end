@@ -25,6 +25,7 @@ const app = new Elysia()
     credentials: true
   }))
 
+  /* 
   .use(swagger({
     path: '/swagger', 
     documentation: {
@@ -35,6 +36,7 @@ const app = new Elysia()
       }
     }
   }))
+  */
   
   .get('/', () => 'Portfolio API is running!')
   
@@ -56,6 +58,8 @@ console.log(
   `🦊 Elysia API is running at http://${app.server?.hostname}:${app.server?.port}`
 );
 
+/*
 console.log(
   `📖 Swagger UI is available at http://${app.server?.hostname}:${app.server?.port}/swagger`
 );
+*/
