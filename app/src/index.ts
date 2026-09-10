@@ -42,6 +42,7 @@ const app = new Elysia()
   */
 
   .get('/', () => 'Portfolio API is running!')
+  
   .use(authRoutes)
   .use(overviewRoutes)
   .use(accountsRoutes)
@@ -54,11 +55,10 @@ const app = new Elysia()
   .use(profileRoutes)
   .use(uploadRoutes); 
 
-if (process.env.NODE_ENV !== 'production') {
-  app.listen(3001);
-  console.log(
-    `🦊 Elysia API is running at http://${app.server?.hostname}:${app.server?.port}`
-  );
-}
+const port = process.env.PORT || 3000;
+
+app.listen(port, () => {
+  console.log(`🦊 Elysia API is running at http://${app.server?.hostname}:${app.server?.port}`);
+});
 
 export default app;
