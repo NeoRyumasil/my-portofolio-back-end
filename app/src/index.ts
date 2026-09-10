@@ -16,14 +16,13 @@ import { profileRoutes } from './routes/profile';
 import { overviewRoutes } from './routes/overview';
 import { uploadRoutes } from './routes/upload';
 
-const app = new Elysia()
-  .use(ErrorHandler)
-
-  const allowedOrigins = process.env.FRONTEND_URLS 
+const allowedOrigins = process.env.FRONTEND_URLS 
   ? process.env.FRONTEND_URLS.split(',') 
   : ['http://localhost:3000'];
 
-  app.use(cors({
+const app = new Elysia()
+  .use(ErrorHandler)
+  .use(cors({
     origin: allowedOrigins,
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true
@@ -41,9 +40,8 @@ const app = new Elysia()
     }
   }))
   */
-  
+
   .get('/', () => 'Portfolio API is running!')
-  
   .use(authRoutes)
   .use(overviewRoutes)
   .use(accountsRoutes)
@@ -54,16 +52,13 @@ const app = new Elysia()
   .use(journeysRoutes)  
   .use(toolsRoutes)
   .use(profileRoutes)
-  .use(uploadRoutes)
+  .use(uploadRoutes); 
 
-  .listen(3001);
+if (process.env.NODE_ENV !== 'production') {
+  app.listen(3001);
+  console.log(
+    `🦊 Elysia API is running at http://${app.server?.hostname}:${app.server?.port}`
+  );
+}
 
-console.log(
-  `🦊 Elysia API is running at http://${app.server?.hostname}:${app.server?.port}`
-);
-
-/*
-console.log(
-  `📖 Swagger UI is available at http://${app.server?.hostname}:${app.server?.port}/swagger`
-);
-*/
+export default app;
