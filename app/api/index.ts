@@ -1,8 +1,4 @@
-import app from '../src/index'; 
-
-export const config = {
-  runtime: 'edge',
-};
+import app from '../src/index';
 
 export default async function handler(request: Request) {
   return app.handle(request);
