@@ -19,8 +19,12 @@ import { uploadRoutes } from './routes/upload';
 const app = new Elysia()
   .use(ErrorHandler)
 
-  .use(cors({
-    origin: ['http://localhost:3000', 'https://portofolioku.com'],
+  const allowedOrigins = process.env.FRONTEND_URLS 
+  ? process.env.FRONTEND_URLS.split(',') 
+  : ['http://localhost:3000'];
+
+  app.use(cors({
+    origin: allowedOrigins,
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true
   }))
