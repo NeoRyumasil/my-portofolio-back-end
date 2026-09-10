@@ -17,4 +17,4 @@ COPY . .
 EXPOSE 3001
 
 # Run Server
-CMD ["bun", "run", "index.ts"]
+CMD ["bun", "run", "src/index.ts"]
